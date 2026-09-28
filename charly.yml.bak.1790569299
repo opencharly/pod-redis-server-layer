@@ -1,5 +1,7 @@
+version: 2026.232.0520
 redis-server-layer:
     candy:
+        version: 2026.144.1443
         description: |
             harness-redis-server — redis-server bound to 0.0.0.0 for cross-pod access
             Runs /usr/bin/redis-server (provided by valkey-compat-redis on Fedora 43)
