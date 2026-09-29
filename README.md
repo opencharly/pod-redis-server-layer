@@ -9,8 +9,8 @@ repo (the candy de-submodule cutover, kind-prefixed naming). It runs
 Runs `/usr/bin/redis-server` (provided by `valkey-compat-redis` on Fedora 43)
 bound to `0.0.0.0:6379` with `protected-mode` off and persistence disabled
 (`--save ''`), so a sibling `redis-client` pod on the shared `charly` network can
-`SET`/`GET` via `redis-cli -h charly-redis`. The service keeps the pod at steady
-state and the published port reachable from the host.
+`SET`/`GET` against it. The service keeps the pod at steady state and the
+published port reachable from the host.
 
 | Property | Value |
 |---|---|
@@ -23,10 +23,12 @@ state and the published port reachable from the host.
 ## How to use it
 
 Compose it as the server side of a cross-pod redis test, paired with
-`pod-redis-client-layer`:
+`pod-redis-client-layer`. Charly derives the container/network hostname from the
+deploy name, so a deploy named `redis` is reachable on the shared `charly`
+network as `charly-redis`:
 
 ```yaml
-my-redis-server:
+redis:
   candy:
     base: fedora
     candy:
@@ -34,8 +36,8 @@ my-redis-server:
 ```
 
 ```bash
-charly box build my-redis-server
-charly start my-redis-server
+charly box build redis
+charly start redis
 charly shell my-redis-client -c "redis-cli -h charly-redis GET bench:hello"
 ```
 
